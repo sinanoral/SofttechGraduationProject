@@ -1,8 +1,7 @@
-package com.softtech.security;
+package com.softtech.security.jwt;
 
 import com.softtech.enums.EnumJwtConstant;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import com.softtech.security.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,13 +16,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class AuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
-    private JwtTokenGenerator jwtTokenGenerator;
+    private JwtUtils jwtUtils;
 
     @Autowired
-    private JwtUserDetailsService jwtUserDetailsService;
+    private UserDetailsServiceImpl userDetailsServiceImpl;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -33,10 +32,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (StringUtils.hasText(token)) {
 
-            boolean isValid = jwtTokenGenerator.validateToken(token);
+            boolean isValid = jwtUtils.validateToken(token);
             if (isValid) {
-                Long userId = jwtTokenGenerator.findUserIdByToken(token);
-                UserDetails userDetails = jwtUserDetailsService.loadUserByUserId(userId);
+                Long userId = jwtUtils.findUserIdByToken(token);
+                UserDetails userDetails = userDetailsServiceImpl.loadUserByUserId(userId);
 
                 if (userDetails != null) {
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

@@ -1,4 +1,4 @@
-package com.softtech.security;
+package com.softtech.security.service;
 
 import com.softtech.model.entity.User;
 import com.softtech.service.UserService;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class JwtUserDetailsService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     private UserService userService;
 
@@ -24,11 +24,11 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userService.findByUserName(username);
-        return JwtUserDetails.create(user);
+        return UserDetailsImpl.create(user);
     }
 
     public UserDetails loadUserByUserId(Long id) {
         User user = userService.getByIdWithControl(id);
-        return JwtUserDetails.create(user);
+        return UserDetailsImpl.create(user);
     }
 }

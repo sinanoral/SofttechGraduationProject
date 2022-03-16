@@ -1,5 +1,6 @@
-package com.softtech.security;
+package com.softtech.security.jwt;
 
+import com.softtech.security.service.UserDetailsImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 @Component
-public class JwtTokenGenerator {
+public class JwtUtils {
 
     @Value("${softtechspringboot.jwt.security.app.key}")
     private String APP_KEY;
@@ -21,11 +22,11 @@ public class JwtTokenGenerator {
 
     public String generateJwtToken(Authentication authentication) {
 
-        JwtUserDetails jwtUserDetails = (JwtUserDetails) authentication.getPrincipal();
+        UserDetailsImpl userDetailsImpl = (UserDetailsImpl) authentication.getPrincipal();
         Date expireDate = new Date(new Date().getTime() + EXPIRE_TIME);
 
         return Jwts.builder()
-                .setSubject(Long.toString(jwtUserDetails.getId()))
+                .setSubject(Long.toString(userDetailsImpl.getId()))
                 .setIssuedAt(new Date())
                 .setExpiration(expireDate)
                 .signWith(SignatureAlgorithm.HS512, APP_KEY)

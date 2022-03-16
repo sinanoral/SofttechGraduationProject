@@ -1,4 +1,4 @@
-package com.softtech.security;
+package com.softtech.security.service;
 
 import com.softtech.model.entity.User;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,21 +9,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class JwtUserDetails implements UserDetails {
+public class UserDetailsImpl implements UserDetails {
 
     private final Long id;
     private final String username;
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    private JwtUserDetails(Long id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    private UserDetailsImpl(Long id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.authorities = authorities;
     }
 
-    public static JwtUserDetails create(User user) {
+    public static UserDetailsImpl create(User user) {
 
         Long id = user.getId();
         String username = user.getUserName();
@@ -32,7 +32,7 @@ public class JwtUserDetails implements UserDetails {
         List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
         grantedAuthorityList.add(new SimpleGrantedAuthority("user"));
 
-        return new JwtUserDetails(id, username, password, grantedAuthorityList);
+        return new UserDetailsImpl(id, username, password, grantedAuthorityList);
     }
 
     @Override
