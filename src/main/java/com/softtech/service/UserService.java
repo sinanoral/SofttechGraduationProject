@@ -8,7 +8,6 @@ import com.softtech.model.requestDto.UserUpdateDto;
 import com.softtech.utility.results.Result;
 import com.softtech.utility.results.SuccessResult;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,30 +15,27 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserDao userDao;
     private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
 
-    public Result create(UserCreateDto userCreateDto) {
+    public Result createUser(UserCreateDto userCreateDto) {
         if(userDao.existsAllByUserName(userCreateDto.getUserName()))
             throw new RuntimeException("User name already exists!");
 
         User user = userMapper.userCreateDtoToUser(userCreateDto);
-        String password = passwordEncoder.encode(user.getPassword());
-        user.setPassword(password);
 
         userDao.save(user);
         return new SuccessResult("Your account has been successfully created");
     }
 
-    public User getByIdWithControl(Long id) {
+    public User getUserByIdWithControl(Long id) {
         return userDao.findById(id).orElseThrow(() -> new RuntimeException("User not found!"));
     }
 
-    public User findByUserName(String username) {
+    public User findUserByUserName(String username) {
         return userDao.findByUserName(username).orElseThrow(() -> new RuntimeException("User not found!"));
     }
 
-    public Result update(Long id, UserUpdateDto userUpdateDto) {
-        User user = getByIdWithControl(id);
+    public Result updateUserById(Long id, UserUpdateDto userUpdateDto) {
+        User user = getUserByIdWithControl(id);
 //
 //        String userNameToUpdate = userUpdateDto.getUserName();
 //        if (!(userNameToUpdate == null || userNameToUpdate.isEmpty() || userNameToUpdate.trim().isEmpty())) {
@@ -65,8 +61,8 @@ public class UserService {
         return new SuccessResult("User updated!");
     }
 
-    public Result delete(Long id) {
-        User user = getByIdWithControl(id);
+    public Result deleteUserById(Long id) {
+        User user = getUserByIdWithControl(id);
         userDao.delete(user);
 
         return new SuccessResult("User has been successfully deleted!");
