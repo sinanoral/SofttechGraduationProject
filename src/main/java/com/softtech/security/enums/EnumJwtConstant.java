@@ -1,4 +1,4 @@
-package com.softtech.enums;
+package com.softtech.security.enums;
 
 public enum EnumJwtConstant {
 

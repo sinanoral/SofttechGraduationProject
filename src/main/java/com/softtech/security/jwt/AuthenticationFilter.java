@@ -1,6 +1,6 @@
 package com.softtech.security.jwt;
 
-import com.softtech.enums.EnumJwtConstant;
+import com.softtech.security.enums.EnumJwtConstant;
 import com.softtech.security.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -1,4 +1,4 @@
-package com.softtech.security;
+package com.softtech.security.config;
 
 import com.softtech.security.jwt.AuthenticationEntryPoint;
 import com.softtech.security.jwt.AuthenticationFilter;
