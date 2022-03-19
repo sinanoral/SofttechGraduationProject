@@ -17,9 +17,9 @@ import java.util.Objects;
 public class ErrorResponse {
     private final int status;
     private final String message;
+    private final String detailMessage;
     private final Date date = new Date();
     private final boolean success = false;
-    private String stackTrace;
     private List<ValidationError> errors;
 
     public void addValidationError(String field, String message) {

@@ -1,69 +1,66 @@
 package com.softtech.exception;
 
 import com.softtech.exception.response.ErrorResponse;
-import org.apache.commons.lang3.exception.ExceptionUtils;
+import com.softtech.exceptions.DuplicateEntityException;
+import com.softtech.exceptions.EntityNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.NoSuchElementException;
-import java.util.Objects;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    public static final String TRACE = "trace";
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest webRequest) {
 
-    @ExceptionHandler(NoSuchElementException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<Object> handleNoSuchElementFoundException(NoSuchElementException itemNotFoundException, WebRequest request) {
-        return buildErrorResponse(itemNotFoundException, HttpStatus.NOT_FOUND, request);
+        String message = ex.getMessage();
+        String description = webRequest.getDescription(false);
+
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), message, description);
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<Object> handleAllUncaughtException(Exception exception, WebRequest request) {
-        return buildErrorResponse(exception, "Unknown error occurred", HttpStatus.INTERNAL_SERVER_ERROR, request);
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
+
+        String message = ex.getBaseErrorMessage().getMessage();
+        String detailMessage = ex.getBaseErrorMessage().getDetailMessage();
+
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), message, detailMessage);
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
-    private ResponseEntity<Object> buildErrorResponse(Exception exception,
-                                                      HttpStatus httpStatus,
-                                                      WebRequest request) {
-        return buildErrorResponse(exception, exception.getMessage(), httpStatus, request);
-    }
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleDuplicateEntityExceptions(DuplicateEntityException ex) {
 
-    private ResponseEntity<Object> buildErrorResponse(Exception exception,
-                                                      String message,
-                                                      HttpStatus httpStatus,
-                                                      WebRequest request) {
-        ErrorResponse errorResponse = new ErrorResponse(httpStatus.value(), message);
-        boolean printStackTrace = false; // TODO(Sinan)
-        if (printStackTrace && isTraceOn(request)) {
-            errorResponse.setStackTrace(ExceptionUtils.getStackTrace(exception));
-        }
-        return ResponseEntity.status(httpStatus).body(errorResponse);
-    }
+        String message = ex.getBaseErrorMessage().getMessage();
+        String detailMessage = ex.getBaseErrorMessage().getDetailMessage();
 
-    private boolean isTraceOn(WebRequest request) {
-        String[] value = request.getParameterValues(TRACE);
-        return Objects.nonNull(value)
-                && value.length > 0
-                && value[0].contentEquals("true");
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), message, detailMessage);
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
     @Override
-    public ResponseEntity<Object> handleExceptionInternal(
-            Exception ex,
-            Object body,
-            HttpHeaders headers,
-            HttpStatus status,
-            WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-        return buildErrorResponse(ex, status, request);
+        String message = "Validation failed!";
+        String detailMessage = "There are validation errors!";
+
+        ErrorResponse errorResponse = new ErrorResponse(status.value(), message, detailMessage);
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            errorResponse.addValidationError(((FieldError) error).getField(), error.getDefaultMessage());
+        });
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 }
+
