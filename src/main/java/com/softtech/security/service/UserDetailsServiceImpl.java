@@ -23,12 +23,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userService.findByUserName(username);
+        User user = userService.findUserByUserName(username);
         return UserDetailsImpl.create(user);
     }
 
     public UserDetails loadUserByUserId(Long id) {
-        User user = userService.getByIdWithControl(id);
+        User user = userService.getUserByIdWithControl(id);
         return UserDetailsImpl.create(user);
     }
 }
