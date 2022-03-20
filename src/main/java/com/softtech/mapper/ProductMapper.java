@@ -19,7 +19,4 @@ public interface ProductMapper {
 
     @Mapping(source = "categoryId", target = "category.id")
     Product productCreateDtoProduct(ProductCreateDto productCreateDto);
-
-    @Mapping(source = "categoryId", target = "category.id")
-    Product productUpdateDtoToProduct(ProductUpdateDto productUpdateDto);
 }

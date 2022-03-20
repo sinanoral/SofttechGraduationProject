@@ -52,8 +52,10 @@ public class ProductService {
     }
 
     public void updateProductById(Long id, ProductUpdateDto productUpdateDto) {
-        getByIdWithControl(id);
-        Product product = mapper.productUpdateDtoToProduct(productUpdateDto);
+        Product product = getByIdWithControl(id);
+        product.setName(productUpdateDto.getName());
+        product.setCategory(categoryService.getCategoryById(productUpdateDto.getCategoryId()));
+        product.setPrice(productUpdateDto.getPrice());
         setVacInclusivePriceAndVatAmount(productUpdateDto.getCategoryId(), product);
         productDao.save(product);
     }
