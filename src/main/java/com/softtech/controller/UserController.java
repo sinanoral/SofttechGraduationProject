@@ -15,7 +15,7 @@ import javax.validation.constraints.Min;
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
-@Validated //Todo(Sinan) add constraints  exception handler
+@Validated
 public class UserController {
 
     private final UserService userService;

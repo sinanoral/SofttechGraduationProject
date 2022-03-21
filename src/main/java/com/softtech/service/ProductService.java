@@ -4,6 +4,7 @@ import com.softtech.dao.ProductDao;
 import com.softtech.enums.ProductErrorMessage;
 import com.softtech.exceptions.EntityNotFoundException;
 import com.softtech.mapper.ProductMapper;
+import com.softtech.model.entity.Category;
 import com.softtech.model.entity.Product;
 import com.softtech.model.requestDto.ProductCreateDto;
 import com.softtech.model.requestDto.ProductUpdateDto;
@@ -14,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,11 +36,12 @@ public class ProductService {
     }
 
     public ProductGetDto getProductById(Long id) {
-        Product product = getByIdWithControl(id);
+        Product product = getProductByIdWithControl(id);
         return mapper.productToProductGetDto(product);
     }
 
     public List<ProductGetDto> getAllProductsByCategoryId(Long id) {
+        categoryService.getCategoryByIdWithControl(id);
         List<Product> products = productDao.getAllByCategory_Id(id);
         return mapper.productListToProductGetDtoList(products);
     }
@@ -52,34 +53,33 @@ public class ProductService {
     }
 
     public void updateProductById(Long id, ProductUpdateDto productUpdateDto) {
-        Product product = getByIdWithControl(id);
+        Product product = getProductByIdWithControl(id);
         product.setName(productUpdateDto.getName());
-        product.setCategory(categoryService.getCategoryById(productUpdateDto.getCategoryId()));
+        product.setCategory(categoryService.getCategoryByIdWithControl(productUpdateDto.getCategoryId()));
         product.setPrice(productUpdateDto.getPrice());
         setVacInclusivePriceAndVatAmount(productUpdateDto.getCategoryId(), product);
         productDao.save(product);
     }
 
     public void updateProductPriceById(Long id, BigDecimal price) {
-        Product product = getByIdWithControl(id);
+        Product product = getProductByIdWithControl(id);
         product.setPrice(price);
         setVacInclusivePriceAndVatAmount(product.getCategory().getId(), product);
         productDao.save(product);
     }
 
     public void deleteProductById(Long id) {
-        Product product = getByIdWithControl(id);
+        Product product = getProductByIdWithControl(id);
         productDao.delete(product);
     }
 
     @Transactional
-    public void updateProductsPriceWithNewVatRate(BigDecimal vatRate, Long categoryId) {
+    public void updateProductsPriceWithUpdatedCategory(Category category) {
 
-        List<Product> products = productDao.findAll()
+        List<Product> products = productDao.getAllByCategory_Id(category.getId())
                 .stream()
-                .filter(product -> Objects.equals(product.getCategory().getId(), categoryId))
                 .peek(product -> {
-                    product.setVatAmount(vatRate.multiply(product.getPrice()));
+                    product.setVatAmount(category.getVatRate().multiply(product.getPrice()));
                     product.setVatInclusivePrice(product.getPrice().add(product.getVatAmount()));
                 })
                 .collect(Collectors.toList());
@@ -87,13 +87,13 @@ public class ProductService {
         productDao.saveAll(products);
     }
 
-    private Product getByIdWithControl(Long id) {
+    private Product getProductByIdWithControl(Long id) {
         return productDao.findById(id).orElseThrow(() ->
                 new EntityNotFoundException(ProductErrorMessage.PRODUCT_NOT_FOUND_ID));
     }
 
     private void setVacInclusivePriceAndVatAmount(Long categoryId, Product product) {
-        BigDecimal vatRate = categoryService.getCategoryById(categoryId).getVatRate();
+        BigDecimal vatRate = categoryService.getCategoryByIdWithControl(categoryId).getVatRate();
         BigDecimal taxFreePrice = product.getPrice();
 
         product.setVatInclusivePrice(taxFreePrice.multiply(vatRate).add(taxFreePrice));

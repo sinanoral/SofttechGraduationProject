@@ -39,13 +39,13 @@ public class CategoryService {
 
     @Transactional
     public void updateVatRateById(Long id, CategoryUpdateDto categoryUpdateDto) {
-        Category category = getCategoryById(id);
+        Category category = getCategoryByIdWithControl(id);
         category.setVatRate(categoryUpdateDto.getVatRate());
         categoryDao.save(category);
-        productService.updateProductsPriceWithNewVatRate(category.getVatRate(), id);
+        productService.updateProductsPriceWithUpdatedCategory(category);
     }
 
-    public Category getCategoryById(Long id) {
+    public Category getCategoryByIdWithControl(Long id) {
         return categoryDao.findById(id).orElseThrow(() ->
                 new EntityNotFoundException(CategoryErrorMessage.CATEGORY_NOT_FOUND_ID));
     }
