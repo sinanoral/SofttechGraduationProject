@@ -51,25 +51,22 @@ public class ProductController {
 
     @Operation(tags = "Product Controller")
     @PostMapping()
-    public ResponseEntity<RestResponse<Void>> createProduct(@RequestBody @Valid ProductCreateDto productCreateDto) {
-        productService.createProduct(productCreateDto);
-        return ResponseEntity.ok(RestResponse.empty());
+    public ResponseEntity<RestResponse<ProductGetDto>> createProduct(@RequestBody @Valid ProductCreateDto productCreateDto) {
+        return ResponseEntity.ok(RestResponse.of(productService.createProduct(productCreateDto)));
     }
 
     @Operation(tags = "Product Controller")
     @PutMapping("/{id}")
-    public ResponseEntity<RestResponse<Void>> updateProductById(@PathVariable @Min(1) Long id,
+    public ResponseEntity<RestResponse<ProductGetDto>> updateProductById(@PathVariable @Min(1) Long id,
                                                                 @RequestBody @Valid ProductUpdateDto productUpdateDto) {
-        productService.updateProductById(id, productUpdateDto);
-        return ResponseEntity.ok(RestResponse.empty());
+        return ResponseEntity.ok(RestResponse.of(productService.updateProductById(id, productUpdateDto)));
     }
 
     @Operation(tags = "Product Controller")
     @PatchMapping("/{id}")
-    public ResponseEntity<RestResponse<Void>> updateProductPriceById(@PathVariable @Min(1) Long id,
+    public ResponseEntity<RestResponse<ProductGetDto>> updateProductPriceById(@PathVariable @Min(1) Long id,
                                                                      @RequestParam BigDecimal price) {
-        productService.updateProductPriceById(id, price);
-        return ResponseEntity.ok(RestResponse.empty());
+        return ResponseEntity.ok(RestResponse.of(productService.updateProductPriceById(id, price)));
     }
 
     @Operation(tags = "Product Controller")

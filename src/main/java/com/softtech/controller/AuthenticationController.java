@@ -4,6 +4,7 @@ import com.softtech.model.requestDto.LoginRequestDto;
 import com.softtech.model.requestDto.UserCreateDto;
 import com.softtech.model.responseDto.LoginResponseDto;
 import com.softtech.model.responseDto.RestResponse;
+import com.softtech.model.responseDto.UserGetDto;
 import com.softtech.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +33,7 @@ public class AuthenticationController {
 
     @Operation(tags = "Authentication Controller")
     @PostMapping("/register")
-    public ResponseEntity<RestResponse<Void>> register(@RequestBody @Valid UserCreateDto userCreateDto) {
-        authenticationService.register(userCreateDto);
-        return ResponseEntity.ok(RestResponse.empty());
+    public ResponseEntity<RestResponse<UserGetDto>> register(@RequestBody @Valid UserCreateDto userCreateDto) {
+        return ResponseEntity.ok(RestResponse.of(authenticationService.register(userCreateDto)));
     }
 }

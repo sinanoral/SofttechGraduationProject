@@ -2,6 +2,7 @@ package com.softtech.controller;
 
 import com.softtech.model.requestDto.UserUpdateDto;
 import com.softtech.model.responseDto.RestResponse;
+import com.softtech.model.responseDto.UserGetDto;
 import com.softtech.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +23,9 @@ public class UserController {
 
     @Operation(tags = "User Controller")
     @PutMapping("/{id}")
-    public ResponseEntity<RestResponse<Void>> updateUserById(@PathVariable @Min(1) Long id,
-                                                             @RequestBody @Valid UserUpdateDto userUpdateDto) {
-        userService.updateUserById(id, userUpdateDto);
-        return ResponseEntity.ok(RestResponse.empty());
+    public ResponseEntity<RestResponse<UserGetDto>> updateUserById(@PathVariable @Min(1) Long id,
+                                                                   @RequestBody @Valid UserUpdateDto userUpdateDto) {
+        return ResponseEntity.ok(RestResponse.of(userService.updateUserById(id, userUpdateDto)));
     }
 
     @Operation(tags = "User Controller")

@@ -1,7 +1,7 @@
 package com.softtech.controller;
 
 import com.softtech.model.requestDto.CategoryUpdateDto;
-import com.softtech.model.responseDto.CategoryDetailsDto;
+import com.softtech.model.responseDto.CategoryDetailDto;
 import com.softtech.model.responseDto.CategoryGetDto;
 import com.softtech.model.responseDto.RestResponse;
 import com.softtech.service.CategoryService;
@@ -31,15 +31,14 @@ public class CategoryController {
 
     @Operation(tags = "Category Controller")
     @GetMapping("/details")
-    public ResponseEntity<RestResponse<List<CategoryDetailsDto>>> getCategoryDetails() {
-        return ResponseEntity.ok(RestResponse.of(categoryService.getCategoryDetails()));
+    public ResponseEntity<RestResponse<List<CategoryDetailDto>>> getCategoryDetails() {
+        return ResponseEntity.ok(RestResponse.of(categoryService.getCategoriesInformation()));
     }
 
     @Operation(tags = "Category Controller")
-    @PutMapping("/{id}")
-    public ResponseEntity<RestResponse<Void>> updateVatRateById(@PathVariable @Min(1) Long id,
-                                                                @RequestBody @Valid CategoryUpdateDto categoryUpdateDto) {
-        categoryService.updateVatRateById(id, categoryUpdateDto);
-        return ResponseEntity.ok(RestResponse.empty());
+    @PatchMapping("/{id}")
+    public ResponseEntity<RestResponse<CategoryGetDto>> updateCategoryVatRateById(@PathVariable @Min(1) Long id,
+                                                                                  @RequestBody @Valid CategoryUpdateDto categoryUpdateDto) {
+        return ResponseEntity.ok(RestResponse.of(categoryService.updateCategoryVatRateById(id, categoryUpdateDto)));
     }
 }
