@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
-public class CategoryDetailsDto {
+public class CategoryDetailDto {
     private String name;
     private BigDecimal vatRate;
     private BigDecimal minPrice;
