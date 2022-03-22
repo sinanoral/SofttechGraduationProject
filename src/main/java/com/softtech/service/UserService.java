@@ -8,6 +8,7 @@ import com.softtech.mapper.UserMapper;
 import com.softtech.model.entity.User;
 import com.softtech.model.requestDto.UserCreateDto;
 import com.softtech.model.requestDto.UserUpdateDto;
+import com.softtech.model.responseDto.UserGetDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +18,11 @@ public class UserService {
     private final UserDao userDao;
     private final UserMapper mapper;
 
-    public void createUser(UserCreateDto userCreateDto) {
+    public UserGetDto createUser(UserCreateDto userCreateDto) {
         checkUserNameAvailability(userCreateDto.getUserName());
         User user = mapper.userCreateDtoToUser(userCreateDto);
         userDao.save(user);
+        return mapper.userToUserGetDto(user);
     }
 
     public User getUserByIdWithControl(Long id) {
@@ -28,16 +30,17 @@ public class UserService {
                 new EntityNotFoundException(UserErrorMessage.USER_NOT_FOUND_ID));
     }
 
-    public User findUserByUserName(String username) {
+    public User getUserByUserNameWithControl(String username) {
         return userDao.findByUserName(username).orElseThrow(() ->
                 new EntityNotFoundException(UserErrorMessage.USER_NOT_FOUND_USERNAME));
     }
 
-    public void updateUserById(Long id, UserUpdateDto userUpdateDto) {
+    public UserGetDto updateUserById(Long id, UserUpdateDto userUpdateDto) {
         getUserByIdWithControl(id);
         checkUserNameAvailability(userUpdateDto.getUserName());
         User user = mapper.userUpdateDtoToUser(userUpdateDto);
         userDao.save(user);
+        return mapper.userToUserGetDto(user);
     }
 
     public void deleteUserById(Long id) {

@@ -3,6 +3,7 @@ package com.softtech.service;
 import com.softtech.model.requestDto.LoginRequestDto;
 import com.softtech.model.requestDto.UserCreateDto;
 import com.softtech.model.responseDto.LoginResponseDto;
+import com.softtech.model.responseDto.UserGetDto;
 import com.softtech.security.enums.EnumJwtConstant;
 import com.softtech.security.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +21,8 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 
-    public void register(UserCreateDto userCreateDto) {
-        userService.createUser(userCreateDto);
+    public UserGetDto register(UserCreateDto userCreateDto) {
+        return userService.createUser(userCreateDto);
     }
 
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {

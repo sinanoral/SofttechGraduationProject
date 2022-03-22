@@ -6,7 +6,7 @@ import com.softtech.exceptions.EntityNotFoundException;
 import com.softtech.mapper.CategoryMapper;
 import com.softtech.model.entity.Category;
 import com.softtech.model.requestDto.CategoryUpdateDto;
-import com.softtech.model.responseDto.CategoryDetailsDto;
+import com.softtech.model.responseDto.CategoryDetailDto;
 import com.softtech.model.responseDto.CategoryGetDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,21 +28,22 @@ public class CategoryService {
         this.productService = productService;
     }
 
-    public List<CategoryDetailsDto> getCategoryDetails() {
-        return categoryDao.getCategoryDetails();
-    }
-
     public List<CategoryGetDto> getAllCategories() {
         List<Category> categories = categoryDao.findAll();
-        return mapper.categoryListToCatergoryGetDtoList(categories);
+        return mapper.categoryListToCategoryGetDtoList(categories);
+    }
+
+    public List<CategoryDetailDto> getCategoriesInformation() {
+        return categoryDao.getCategoriesInformation();
     }
 
     @Transactional
-    public void updateVatRateById(Long id, CategoryUpdateDto categoryUpdateDto) {
+    public CategoryGetDto updateCategoryVatRateById(Long id, CategoryUpdateDto categoryUpdateDto) {
         Category category = getCategoryByIdWithControl(id);
         category.setVatRate(categoryUpdateDto.getVatRate());
         categoryDao.save(category);
         productService.updateProductsPriceWithUpdatedCategory(category);
+        return mapper.categoryToCategoryGetDto(category);
     }
 
     public Category getCategoryByIdWithControl(Long id) {
