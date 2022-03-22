@@ -3,6 +3,7 @@ package com.softtech.mapper;
 import com.softtech.model.entity.User;
 import com.softtech.model.requestDto.UserCreateDto;
 import com.softtech.model.requestDto.UserUpdateDto;
+import com.softtech.model.responseDto.UserGetDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -14,5 +15,7 @@ public interface UserMapper {
     User userCreateDtoToUser(UserCreateDto userCreateDto);
 
     User userUpdateDtoToUser(UserUpdateDto userUpdateDto);
+
+    UserGetDto userToUserGetDto(User user);
 }
 
