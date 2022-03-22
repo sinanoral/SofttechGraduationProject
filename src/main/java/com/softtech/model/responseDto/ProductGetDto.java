@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 public class ProductGetDto {
     private Long id;
     private String name;
-    private String category;
+    private Long categoryId;
     private BigDecimal price;
     private BigDecimal vatAmount;
     private BigDecimal vatInclusivePrice;
