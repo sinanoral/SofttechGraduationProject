@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
 import java.math.BigDecimal;
 
 @Entity
@@ -19,6 +20,7 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "FK_CATEGORY_ID")
     private Category category;
 
+    @DecimalMin(value = "0.0001", message = "Price can not be negative or zero!")
     @Column(name = "PRICE", nullable = false, precision = 19, scale = 2)
     private BigDecimal price;
 
