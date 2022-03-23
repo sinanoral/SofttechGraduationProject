@@ -31,7 +31,7 @@ public class CategoryController {
 
     @Operation(tags = "Category Controller")
     @GetMapping("/details")
-    public ResponseEntity<RestResponse<List<CategoryDetailDto>>> getCategoryDetails() {
+    public ResponseEntity<RestResponse<List<CategoryDetailDto>>> getCategoriesInformation() {
         return ResponseEntity.ok(RestResponse.of(categoryService.getCategoriesInformation()));
     }
 
