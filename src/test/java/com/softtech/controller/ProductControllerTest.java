@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-@Sql({"/import_categories.sql"})
+@Sql({"/import_categories.sql", "/import_products.sql"})
 class ProductControllerTest extends BaseTest {
     private static final String BASE_PATH = "/api/v1/products";
 
@@ -131,27 +131,15 @@ class ProductControllerTest extends BaseTest {
 
     @Test
     void updateProductById() throws Exception {
-        ProductCreateDto productCreateDto = ProductCreateDto.builder()
-                .name("test")
-                .categoryId(1L)
-                .price(BigDecimal.valueOf(10))
-                .build();
-
-        String createContent = objectMapper.writeValueAsString(productCreateDto);
-
-        mockMvc.perform(
-                post(BASE_PATH).content(createContent).contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andReturn();
-
         ProductUpdateDto productUpdateDto = new ProductUpdateDto();
         productUpdateDto.setName("test1");
         productUpdateDto.setCategoryId(2L);
         productUpdateDto.setPrice(BigDecimal.valueOf(20));
 
-        String updateContent = objectMapper.writeValueAsString(productUpdateDto);
+        String content = objectMapper.writeValueAsString(productUpdateDto);
 
         MvcResult result = mockMvc.perform(
-                put(BASE_PATH + "/1").content(updateContent).contentType(MediaType.APPLICATION_JSON)
+                put(BASE_PATH + "/1").content(content).contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk()).andReturn();
 
         boolean isSuccess = isSuccess(result);
@@ -184,20 +172,8 @@ class ProductControllerTest extends BaseTest {
 
     @Test
     void deleteProductById() throws Exception {
-        ProductCreateDto productCreateDto = ProductCreateDto.builder()
-                .name("test")
-                .categoryId(1L)
-                .price(BigDecimal.valueOf(10))
-                .build();
-
-        String content = objectMapper.writeValueAsString(productCreateDto);
-
-        mockMvc.perform(
-                post(BASE_PATH).content(content).contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk()).andReturn();
-
         MvcResult result = mockMvc.perform(
-                delete(BASE_PATH + "/1").content("1").contentType(MediaType.APPLICATION_JSON)
+                delete(BASE_PATH + "/2").content("2").contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk()).andReturn();
 
         boolean isSuccess = isSuccess(result);

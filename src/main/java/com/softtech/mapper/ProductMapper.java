@@ -2,7 +2,6 @@ package com.softtech.mapper;
 
 import com.softtech.model.entity.Product;
 import com.softtech.model.requestDto.ProductCreateDto;
-import com.softtech.model.requestDto.ProductUpdateDto;
 import com.softtech.model.responseDto.ProductGetDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

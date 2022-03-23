@@ -14,6 +14,7 @@ public interface UserMapper {
     @Mapping(source = "password", target = "password", qualifiedBy = EncodedMapping.class)
     User userCreateDtoToUser(UserCreateDto userCreateDto);
 
+    @Mapping(source = "password", target = "password", qualifiedBy = EncodedMapping.class)
     User userUpdateDtoToUser(UserUpdateDto userUpdateDto);
 
     UserGetDto userToUserGetDto(User user);

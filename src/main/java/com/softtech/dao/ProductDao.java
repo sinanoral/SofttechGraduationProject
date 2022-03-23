@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface ProductDao extends JpaRepository<Product, Long> {
     List<Product> getAllByCategory_Id(Long id);
+
     List<Product> getAllByVatInclusivePriceBetween(BigDecimal min, BigDecimal max);
 }

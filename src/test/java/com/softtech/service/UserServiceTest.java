@@ -5,12 +5,9 @@ import com.softtech.enums.UserErrorMessage;
 import com.softtech.exceptions.DuplicateEntityException;
 import com.softtech.exceptions.EntityNotFoundException;
 import com.softtech.mapper.UserMapper;
-import com.softtech.model.entity.Product;
 import com.softtech.model.entity.User;
-import com.softtech.model.requestDto.ProductUpdateDto;
 import com.softtech.model.requestDto.UserCreateDto;
 import com.softtech.model.requestDto.UserUpdateDto;
-import com.softtech.model.responseDto.ProductGetDto;
 import com.softtech.model.responseDto.UserGetDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,10 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 

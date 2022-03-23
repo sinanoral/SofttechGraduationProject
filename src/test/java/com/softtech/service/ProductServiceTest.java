@@ -15,14 +15,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,7 +46,7 @@ class ProductServiceTest {
         List<Product> productList = new ArrayList<>();
         productList.add(product);
 
-        ProductGetDto productGetDto =mock(ProductGetDto.class);
+        ProductGetDto productGetDto = mock(ProductGetDto.class);
         List<ProductGetDto> productGetDtoList = new ArrayList<>();
         productGetDtoList.add(productGetDto);
 
@@ -64,8 +64,8 @@ class ProductServiceTest {
     @Test
     void whenGetAllProductsCalledWithParameters_itShouldReturnProductDtoList() {
 
-        Product product1 =mock(Product.class);
-        Product product2 =mock(Product.class);
+        Product product1 = mock(Product.class);
+        Product product2 = mock(Product.class);
         product1.setVatInclusivePrice(BigDecimal.valueOf(40));
         product2.setVatInclusivePrice(BigDecimal.valueOf(50));
 
@@ -73,8 +73,8 @@ class ProductServiceTest {
         productList.add(product1);
         productList.add(product2);
 
-        ProductGetDto productGetDto1 =mock(ProductGetDto.class);
-        ProductGetDto productGetDto2 =mock(ProductGetDto.class);
+        ProductGetDto productGetDto1 = mock(ProductGetDto.class);
+        ProductGetDto productGetDto2 = mock(ProductGetDto.class);
         productGetDto1.setVatInclusivePrice(BigDecimal.valueOf(40));
         productGetDto2.setVatInclusivePrice(BigDecimal.valueOf(50));
 
@@ -129,7 +129,7 @@ class ProductServiceTest {
         List<Product> productList = new ArrayList<>();
         productList.add(product);
 
-        ProductGetDto productGetDto =mock(ProductGetDto.class);
+        ProductGetDto productGetDto = mock(ProductGetDto.class);
         List<ProductGetDto> productGetDtoList = new ArrayList<>();
         productGetDtoList.add(productGetDto);
 

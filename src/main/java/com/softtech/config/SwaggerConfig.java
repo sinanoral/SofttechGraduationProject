@@ -28,13 +28,13 @@ public class SwaggerConfig {
                         new Components()
                                 .addSecuritySchemes(securitySchemeName,
                                         new SecurityScheme()
-
+                                                .description("Please insert token below (Don't put `Bearer` before the token)")
                                                 .name(securitySchemeName)
                                                 .type(SecurityScheme.Type.HTTP)
                                                 .scheme("bearer")
                                                 .bearerFormat("JWT")
                                 )
                 )
-                .info(new Info().title(apiTitle).version("1"));
+                .info(new Info().title(apiTitle).version("v1"));
     }
 }
