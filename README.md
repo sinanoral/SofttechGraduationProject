@@ -50,7 +50,7 @@
 10. After the tables generated, run [this](https://github.com/165-Softtech-Patika-Java-Spring/bitirmeprojesi-sinanoral/blob/main/src/main/resources/import_categories.sql) sql script.
 ### And you are ready...
 
-###For docker
+### For docker
 
 1. Go to 'C:\Program Files\PostgreSQL\14\data' and add following line to end of the 'pg_hba.conf' file.
     ![postgre-path](https://user-images.githubusercontent.com/10232721/151714910-0d9f2a7f-5246-47b8-a8ea-bd5223e1b5e8.png)
