@@ -30,6 +30,7 @@ export default function ProductTable() {
   if (isError) {
     return <span>Error: {error.message}</span>;
   }
+
   return (
     <Table variant="simple">
       <TableCaption>Products</TableCaption>

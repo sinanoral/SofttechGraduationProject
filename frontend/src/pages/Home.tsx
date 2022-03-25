@@ -5,7 +5,7 @@ import ProductTable from "../components/products/ProductTable";
 export default function Home() {
   return (
     <Flex justify="space-between" w="100%">
-      <Flex flexDir={"column"} w="40%">
+      <Flex flexDir={"column"} w="45%">
         <CreateProduct />
       </Flex>
       <ProductTable />
