@@ -4,12 +4,13 @@ import { HttpVerb, getToken, SuccessResponse, ErrorResponse } from "../common";
 import { Product } from "./product";
 
 interface UpdateProduct {
+  id: number;
   name: string;
   categoryId: number;
   price: number;
 }
 
-async function updateProductById(id: number, requestBody: UpdateProduct) {
+async function updateProductById(requestBody: UpdateProduct) {
   const requestOptions = {
     method: HttpVerb.PUT,
     headers: {
@@ -19,17 +20,15 @@ async function updateProductById(id: number, requestBody: UpdateProduct) {
     body: JSON.stringify(requestBody),
   };
 
-  return await fetch(BASE_URL + URL.PRODUCTS + "/" + id, requestOptions).then(
-    (res) => res.json()
-  );
+  return await fetch(
+    BASE_URL + URL.PRODUCTS + "/" + requestBody.id,
+    requestOptions
+  ).then((res) => res.json());
 }
 
-export const useUpdateProductById = (
-  id: number,
-  requestBody: UpdateProduct
-) => {
-  return useMutation<SuccessResponse<Product>, ErrorResponse>(
+export const useUpdateProductById = () => {
+  return useMutation<SuccessResponse<Product>, ErrorResponse, UpdateProduct>(
     "updateProductById",
-    () => updateProductById(id, requestBody)
+    (requestBody) => updateProductById(requestBody)
   );
 };

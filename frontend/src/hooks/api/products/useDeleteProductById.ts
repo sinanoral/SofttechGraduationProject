@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { BASE_URL, URL } from "../../../api/constants";
 import { HttpVerb, getToken, SuccessResponse, ErrorResponse } from "../common";
 
@@ -16,9 +16,9 @@ async function deleteProductById(id: number) {
   );
 }
 
-export const useDeleteProductById = (id: number) => {
-  return useQuery<SuccessResponse<void>, ErrorResponse>(
+export const useDeleteProductById = () => {
+  return useMutation<SuccessResponse<void>, ErrorResponse, number>(
     "deleteProductById",
-    () => deleteProductById(id)
+    (id) => deleteProductById(id)
   );
 };

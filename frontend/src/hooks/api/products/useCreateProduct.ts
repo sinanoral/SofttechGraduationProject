@@ -24,9 +24,9 @@ async function createProduct(requestBody: CreateProduct) {
   );
 }
 
-export const useCreateProduct = (requestBody: CreateProduct) => {
-  return useMutation<SuccessResponse<Product>, ErrorResponse>(
+export const useCreateProduct = () => {
+  return useMutation<SuccessResponse<Product>, ErrorResponse, CreateProduct>(
     "createProduct",
-    () => createProduct(requestBody)
+    (requestBody) => createProduct(requestBody)
   );
 };
